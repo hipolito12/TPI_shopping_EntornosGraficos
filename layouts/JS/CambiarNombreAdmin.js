@@ -1,9 +1,9 @@
-(function () {
+(function activarMenuAdmin() {
   function run() {
     const el = document.getElementById('btnLogin');
     if (!el) return;
 
-    el.setAttribute('href', '/TPIShopping/View/DashBoardCliente.php');
+    el.setAttribute('href', '/TPIShopping/View/DashboardAdministrador.php');
 
     const icon = el.querySelector('i');
     if (icon) {

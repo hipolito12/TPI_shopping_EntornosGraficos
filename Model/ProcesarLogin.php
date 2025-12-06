@@ -69,7 +69,7 @@ function checkCredentials($email, $password)
 FROM usuario AS u
 JOIN rol       AS r ON r.IDrol       = u.tipoFK
 JOIN categoria AS c ON c.IDcategoria = u.categoriaFK
-WHERE u.email = :email
+WHERE u.email = :email  and u.estado = 1
 LIMIT 1;
 ";
     $stmt = $pdo->prepare($sql);

@@ -187,8 +187,11 @@ $categorias = getCategoriasUsuarios();
                                 <i class="bi bi-list-ul me-2"></i>Historial
                             </a>
                         </li>
-                        <li class="nav-item"><a class="nav-link" href="mailto:admin@shoppinggenerico.com?subject=Consulta%20desde%20el%20dashboard&body=Hola%20administrador,%0A%0A%20Tengo%20una%20consulta%20sobre...">Contactar Administrador</a></li>
-
+<li class="nav-item">
+    <a class="nav-link" href="./Contacto.php">
+        <i class="bi bi-envelope me-2"></i>Contactos
+    </a>
+</li>
                     </ul>
                 </div>
 
@@ -439,6 +442,29 @@ $categorias = getCategoriasUsuarios();
                 this.value = '';
             }
         });
+    </script>
+
+    <script>
+        function exportarHistorial() {
+    // 1. Definimos el contenido exacto que pediste, ya formateado
+    const contenido = 
+`Fecha Uso\tCliente\tDNI\tCategoría\tPromoción\tEstado
+26/10/2025 00:00\tgrupo 4\t43349281\tMedium\tDescripcion de prueba (15/10/2025 - 30/01/2026)\tAceptado
+25/10/2025 00:00\tgrupo 4\t43349281\tMedium\tPruebaFormulario (26/10/2025 - 30/01/2026)\tAceptado
+25/10/2025 00:00\tgrupo 4\t43349281\tInicial\tPruebaFormulario (26/10/2025 - 30/01/2026)\tAceptado`;
+
+    // 2. Creamos un "Blob" (archivo en memoria)
+    const archivo = new Blob([contenido], { type: 'text/plain' });
+
+    // 3. Creamos un enlace invisible y lo clicamos automáticamente
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(archivo);
+    a.download = 'Historial_Usos.txt'; // Nombre del archivo descargado
+    a.click();
+    
+    // 4. Limpieza (opcional pero recomendada)
+    URL.revokeObjectURL(a.href);
+}
     </script>
 </body>
 </html>

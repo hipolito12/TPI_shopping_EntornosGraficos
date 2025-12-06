@@ -229,7 +229,7 @@ $estadisticas = getEstadisticasNovedades();
                         <span class="badge bg-light text-primary">Administrador</span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                        <li><a class="dropdown-item" href="./DashboardAdmin.php">Dashboard</a></li>
+                        <li><a class="dropdown-item" href="./DashboardAdministrador.php">Menu</a></li>
                         <li><a class="dropdown-item" href="./GestionLocales.php">Gestión de Locales</a></li>
                         <li><a class="dropdown-item" href="./AprobarSolicitudes.php">Aprobar Solicitudes</a></li>
                         <li><a class="dropdown-item" href="./AprobarPromociones.php">Aprobar Promociones</a></li>
@@ -251,7 +251,7 @@ $estadisticas = getEstadisticasNovedades();
                     <ul class="nav flex-column">
                         <li class="nav-item">
                             <a class="nav-link" href="./DashboardAdministrador.php">
-                                <i class="bi bi-speedometer2 me-2"></i>Dashboard
+                                <i class="bi bi-speedometer2 me-2"></i>Menu
                             </a>
                         </li>
                         <li class="nav-item">
@@ -279,6 +279,11 @@ $estadisticas = getEstadisticasNovedades();
                                 <i class="bi bi-graph-up me-2"></i>Reportes
                             </a>
                         </li>
+                        <li class="nav-item">
+    <a class="nav-link" href="./GestionContacto.php">
+        <i class="bi bi-envelope me-2"></i>Contactos
+    </a>
+</li>
                     </ul>
                 </div>
             </nav>

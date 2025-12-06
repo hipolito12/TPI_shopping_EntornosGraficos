@@ -1,15 +1,15 @@
-(function () {
+(function activarMenuTienda() {
   function run() {
     const el = document.getElementById('btnLogin');
     if (!el) return;
 
-    el.setAttribute('href', '/TPIShopping/View/DashBoardCliente.php');
+    el.setAttribute('href', '/TPIShopping/View/DashboardTienda.php');
 
     const icon = el.querySelector('i');
     if (icon) {
-      el.innerHTML = icon.outerHTML + ' MENU';
+      el.innerHTML = icon.outerHTML + ' MENU Tienda';
     } else {
-      el.textContent = 'MENU';
+      el.textContent = 'MENU tienda';
     }
 
     el.id = 'btnDashboard';

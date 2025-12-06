@@ -175,8 +175,8 @@ function recorte($txt, $len=160){ return h(mb_strimwidth((string)$txt, 0, $len, 
       document.getElementById('mCuerpo').textContent      = get('data-cuerpo') || '—';
     });
   </script>
-  <?php if (isset($_SESSION['IDusuario'])): ?>
-<script src="../layouts/JS/OcultarBoton.js" ></script>
+ <?php if (isset($_SESSION['IDusuario'])): ?>
+<script src="../layouts/JS/cambiarNombre.js"></script>
 <?php endif; ?>
 </body>
 </html>

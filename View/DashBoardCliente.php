@@ -1,10 +1,19 @@
 <?php 
-session_start(); 
+session_start();
+
+header("Cache-Control: no-cache, no-store, must-revalidate");
+header("Pragma: no-cache");
+header("Expires: 0");
+
 if (!isset($_SESSION['IDusuario']) || $_SESSION['Rol'] !='Usuario') {
-session_unset();
+    session_unset();
     header("Location: ../index.php");
     exit;
 }
+
+if (isset($_SERVER['HTTP_CACHE_CONTROL']) && $_SERVER['HTTP_CACHE_CONTROL'] === 'max-age=0') {
+}
+
 require_once '../Model/ProcesarDashboardCliente.php';
 
 $IDU = (int)($_SESSION['IDusuario'] ?? 0);

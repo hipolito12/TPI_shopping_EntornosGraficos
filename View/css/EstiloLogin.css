@@ -1,21 +1,26 @@
-div#MODAL{
-        display: block;
-    }
-
-#cabecera{
-    background-color: #4A3BC7;
-    color:#E9E7FF;
+/* Estilos mínimos necesarios */
+.bg-auth {
+    background-color: #eeecfd !important;
 }
 
-
-
-.modal-dialog{
-    margin-top: 30px;
+.password-toggle {
+    cursor: pointer;
+    transition: all 0.15s ease-in-out;
 }
 
-@media (max-width:768px){
-    .modal-dialog {
-        margin-top: 100px;
-    }
+.password-toggle:hover {
+    background-color: var(--bs-secondary-bg) !important;
 }
 
+/* Sobrescribir colores primarios de Bootstrap */
+:root {
+    --bs-primary: #4A3BC7;
+    --bs-primary-rgb: 74, 59, 199;
+}
+
+.btn-primary {
+    --bs-btn-bg: var(--bs-primary);
+    --bs-btn-border-color: var(--bs-primary);
+    --bs-btn-hover-bg: #3a2da5;
+    --bs-btn-hover-border-color: #3a2da5;
+}

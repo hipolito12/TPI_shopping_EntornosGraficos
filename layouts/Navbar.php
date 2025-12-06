@@ -1,13 +1,54 @@
 <?php
- 
+  // 1. Definición de la Ruta Base
   $BASE = '/TPIShopping/';
 
- 
+  // Verificación de sesión segura
+  if (session_status() === PHP_SESSION_NONE) {
+      session_start();
+  }
+
+  // 2. Configuración por defecto (Usuario NO logueado)
+  $textoBoton = "Ingresar";
+  $linkBoton = $BASE . "View/login.php";
+  $iconoBoton = "bi-box-arrow-in-right";
+  $idBoton = "btnLogin"; 
+
+  // 3. Si el usuario ESTÁ logueado
+  if (isset($_SESSION['IDusuario']) && isset($_SESSION['Rol'])) {
+      
+      // --- CAMBIO AQUÍ: Agregamos el nombre del usuario al botón ---
+      // Usamos htmlspecialchars por seguridad y un operador ?? por si el nombre está vacío
+      $nombreUsuario = htmlspecialchars($_SESSION['Nombre'] ?? '');
+      $textoBoton = "Menu $nombreUsuario"; 
+      // -----------------------------------------------------------
+
+      $iconoBoton = "bi-person-circle";
+      $idBoton = "btnDashboard"; 
+
+      // Rutas según Rol
+      switch ($_SESSION['Rol']) {
+          case 'Administrador':
+              $linkBoton = $BASE . "View/DashboardAdministrador.php";
+              break;
+          case 'Comerciante': 
+              $linkBoton = $BASE . "View/DashboardTienda.php";
+              break;
+          case 'Usuario':     
+              $linkBoton = $BASE . "View/DashBoardCliente.php";
+              break;
+          default:
+              $linkBoton = $BASE . "index.php"; 
+              break;
+      }
+  }
 ?>
+
 <style><?php include dirname(__DIR__) . '/layouts/css/Navbar.css'; ?></style>
+
 <header class="hero-header">
   <nav class="navbar navbar-expand-lg justify-content-evenly" data-bs-theme="dark" style="--bs-navbar-bg:#2A2668;">
     <div class="container align-items d-flex flex-row mx-3">
+      
       <a class="navbar-brand fw-bold fs-4" href="<?= $BASE ?>index.php">
         <i class="bi bi-shop me-2 fs-1"></i>Shopping UTN
       </a>
@@ -26,8 +67,8 @@
           <li class="nav-item"><a class="nav-link" href="<?= $BASE ?>View/Comer.html">Comer</a></li>
         </ul>
 
-        <a class="btn btn-outline-light btn-lg me-3" href="<?= $BASE ?>View/login.php" id="btnLogin">
-          <i class="bi bi-box-arrow-in-right mx-1 me-2"></i>Ingresar
+        <a class="btn btn-outline-light btn-lg me-3" href="<?= $linkBoton ?>" id="<?= $idBoton ?>">
+          <i class="bi <?= $iconoBoton ?> mx-1 me-2"></i><?= $textoBoton ?>
         </a>
       </div>
     </div>

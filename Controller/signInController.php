@@ -62,7 +62,7 @@ try {
         }
 
          $id=insertarUsuario($nombreCompleto,$email,$pwd,$tel,$sexo,$dni);
-        EnviaMail("labarbahipolito@gmail.com");//mail hardcodeado--> generadoe con https://temp-mail.org/es/
+        EnviaMail($email);//mail hardcodeado--> generadoe con https://temp-mail.org/es/
 
         echo json_encode([
             'ok' => true,

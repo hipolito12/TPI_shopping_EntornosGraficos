@@ -1,5 +1,8 @@
 <?php
 
+header("Cache-Control: no-cache, no-store, must-revalidate");
+header("Pragma: no-cache");
+header("Expires: 0");
 require_once '../Controller/DashboardTiendaController.php';
 
 if (!isset($_SESSION['IDusuario']) || $_SESSION['Rol'] !='Comerciante') {
@@ -8,6 +11,8 @@ if (!isset($_SESSION['IDusuario']) || $_SESSION['Rol'] !='Comerciante') {
     exit;
 }
 
+if (isset($_SERVER['HTTP_CACHE_CONTROL']) && $_SERVER['HTTP_CACHE_CONTROL'] === 'max-age=0') {
+}
 
 $IDU = (int)$_SESSION['IDusuario'];
 $local = getLocalPorUsuario($IDU);
@@ -133,8 +138,11 @@ $solicitudesPendientes = getSolicitudesPendientesPorLocal($idLocal);
                             </a>
                         </li>
             <li class="nav-item"><a class="nav-link" href="./HistorialUsos.php"><i class="bi bi-list-ul me-2"></i> Historial</a></li>
-            <li class="nav-item"><a class="nav-link" href="mailto:admin@shoppinggenerico.com?subject=Consulta%20desde%20el%20dashboard&body=Hola%20administrador,%0A%0A%20Tengo%20una%20consulta%20sobre...">Contactar Administrador</a></li>
-          </ul>
+<li class="nav-item">
+    <a class="nav-link" href="./Contacto.php">
+        <i class="bi bi-envelope me-2"></i>Contactos
+    </a>
+</li>          </ul>
         </div>
 
         <hr>

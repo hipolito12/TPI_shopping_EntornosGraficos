@@ -200,8 +200,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </a>
                         </li>
             <li class="nav-item"><a class="nav-link" href="./HistorialUsos.php"><i class="bi bi-list-ul me-2"></i>Historial</a></li>
-            <li class="nav-item"><a class="nav-link" href="mailto:admin@shoppinggenerico.com?subject=Consulta%20desde%20el%20dashboard&body=Hola%20administrador,%0A%0A%20Tengo%20una%20consulta%20sobre...">Contactar Administrador</a></li>
-          </ul>
+<li class="nav-item">
+    <a class="nav-link" href="./Contacto.php">
+        <i class="bi bi-envelope me-2"></i>Contactos
+    </a>
+</li>          </ul>
         </div>
 
                 <hr>
@@ -329,7 +332,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                     <i class="bi bi-check-lg me-2"></i>Crear Promoción
                                                 </button>
                                                 <a href="./DashBoardTienda.php" class="btn btn-outline-secondary px-4">
-                                                    <i class="bi bi-arrow-left me-2"></i>Volver al Dashboard
+                                                    <i class="bi bi-arrow-left me-2"></i>Volver al Menu
                                                 </a>
                                             </div>
                                         </form>

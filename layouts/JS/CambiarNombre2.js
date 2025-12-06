@@ -3,7 +3,8 @@
     const el = document.getElementById('btnLogin');
     if (!el) return;
 
-    el.setAttribute('href', '/TPIShopping/View/DashBoardCliente.php');
+    // Usar rutas relativas en lugar de absolutas
+    el.setAttribute('href', './DashBoardCliente.php');
 
     const icon = el.querySelector('i');
     if (icon) {
@@ -17,7 +18,8 @@
     if (el.tagName.toLowerCase() !== 'a') {
       el.addEventListener('click', (e) => {
         e.preventDefault();
-        location.assign('/TPIShopping/');
+        // Usar ruta relativa para el redireccionamiento
+        location.assign('/');
       });
     }
   }

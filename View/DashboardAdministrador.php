@@ -2,12 +2,17 @@
 session_start();
 require_once '../Model/DashBoardAdmin.php';
 
-
+header("Cache-Control: no-cache, no-store, must-revalidate");
+header("Pragma: no-cache");
+header("Expires: 0");
 
 if (!isset($_SESSION['IDusuario']) || $_SESSION['Rol'] !='Administrador') {
   session_unset();
     header("Location: ../index.php");
     exit;
+}
+
+if (isset($_SERVER['HTTP_CACHE_CONTROL']) && $_SERVER['HTTP_CACHE_CONTROL'] === 'max-age=0') {
 }
 
 $reporteUsos = getReporteUsos($filtrosReporte);
@@ -204,6 +209,11 @@ $todosLocales = getAllLocales();
                                 <i class="bi bi-graph-up me-2"></i>Reportes
                             </a>
                         </li>
+                        <li class="nav-item">
+    <a class="nav-link" href="./GestionContacto.php">
+        <i class="bi bi-envelope me-2"></i>Contactos
+    </a>
+</li>
                     </ul>
                 </div>
             </nav>
