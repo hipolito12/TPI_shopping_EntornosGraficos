@@ -1,0 +1,23 @@
+# Ignore Sendmail credentials and environment files
+/Model/Sendmail.php
+/.env
+/.env.local
+
+# Ignore local IDE and OS files
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
+
+# Ignore composer / vendor (if present)
+/vendor/
+
+# Ignore npm/node modules
+node_modules/
+
+# Ignore logs and runtime files
+*.log
+tmp/
+
+# Keep a template in repo, not the real credentials file
+/Model/Sendmail.php.example
