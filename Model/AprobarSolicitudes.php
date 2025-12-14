@@ -202,24 +202,27 @@ function enviarEmail($destinatario, $asunto, $mensaje) {
     $mail = new PHPMailer(true);
 
     try {
-        // Configuración del Servidor (Datos de tu sendmail.ini)
+        // Configuración del Servidor (leer desde variables de entorno cuando estén disponibles)
         $mail->isSMTP();
-        $mail->Host       = 'smtp.gmail.com';
-        $mail->SMTPAuth   = true;
-        $mail->Username   = 'labarbahipolito3@gmail.com';
-        $mail->Password   = 'dzgr hgxl dnci guei';
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-        $mail->Port       = 587;
-        $mail->CharSet    = 'UTF-8';
+        $mail->Host = getenv('SMTP_HOST') ?: 'smtp.gmail.com';
+        $mail->SMTPAuth = filter_var(getenv('SMTP_AUTH') ?: 'true', FILTER_VALIDATE_BOOLEAN);
+        $mail->Username = getenv('SMTP_USER') ?: 'labarbahipolito3@gmail.com';
+        $mail->Password = getenv('SMTP_PASS') ?: 'dzgr hgxl dnci guei';
+        $secureEnv = strtolower(getenv('SMTP_SECURE') ?: 'tls');
+        $mail->SMTPSecure = ($secureEnv === 'ssl') ? PHPMailer::ENCRYPTION_SMTPS : PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port = intval(getenv('SMTP_PORT') ?: 587);
+        $mail->CharSet = getenv('SMTP_CHARSET') ?: 'UTF-8';
 
         // Remitente y Destinatario
-        $mail->setFrom('labarbahipolito3@gmail.com', 'Shopping UTN');
+        $from = getenv('SMTP_FROM') ?: 'labarbahipolito3@gmail.com';
+        $fromName = getenv('SMTP_FROM_NAME') ?: 'Shopping UTN';
+        $mail->setFrom($from, $fromName);
         $mail->addAddress($destinatario);
 
         // Contenido
         $mail->isHTML(true);
         $mail->Subject = $asunto;
-        $mail->Body    = $mensaje;
+        $mail->Body = $mensaje;
 
         $mail->send();
         return true;
