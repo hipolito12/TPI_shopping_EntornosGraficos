@@ -1,7 +1,4 @@
-// Tienda_Fetch.js
-// Maneja el submit del formulario, envía por fetch al controlador,
-// y muestra errores por campo con Bootstrap (.is-invalid + .invalid-feedback)
-// además de alertas generales en #server-messages.
+// Maneja submit y errores
 
 (function () {
   'use strict';
@@ -42,8 +39,7 @@
     $all('.is-invalid, .is-valid', form).forEach(el => {
       el.classList.remove('is-invalid', 'is-valid');
     });
-    // No vaciamos los .invalid-feedback por si querés conservar mensajes antiguos
-    // pero normalmente tiene sentido vaciarlos:
+    // Limpiar validaciones
     $all('.invalid-feedback', form).forEach(fb => { fb.textContent = ''; });
   };
 
@@ -107,7 +103,7 @@
   };
 
   const parseJsonSafe = async (resp) => {
-    // Intenta parsear JSON; si falla, devuelve {}
+    // Parsear JSON seguro
     try {
       const ct = resp.headers.get('content-type') || '';
       if (ct.includes('application/json')) return await resp.json();
@@ -181,7 +177,6 @@
       setLoading(false);
     }
   });
-  console.log('server errors:', Object.keys(errors));
-console.log('form fields:', Array.from(form.elements).map(e => e.name || e.id));
+
 
 })();

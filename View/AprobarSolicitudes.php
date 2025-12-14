@@ -1,23 +1,21 @@
 <?php
 session_start();
-require_once '../Model/AprobarSolicitudes.php'; // Asegúrate de que esta ruta sea correcta
+require_once '../Model/AprobarSolicitudes.php';
 
 $mensaje = '';
 $tipoMensaje = '';
 
-// 1. Obtener la conexión para poder manejar la transacción aquí en la Vista/Controlador
 $pdo = getConnection();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
     $idSolicitud = $_POST['id_solicitud'] ?? 0;
     
-    // Validar ID
     if (!$idSolicitud) {
         $mensaje = 'ID de solicitud no válido.';
         $tipoMensaje = 'danger';
     } else {
-        // Obtener datos de la solicitud usando la conexión actual
+        // Datos de solicitud
         $query = "SELECT * FROM solicitud WHERE IDsolicitud = ?";
         $stmt = $pdo->prepare($query);
         $stmt->execute([$idSolicitud]);
@@ -30,27 +28,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             switch ($action) {
                 case 'aprobar':
                     try {
-                        // --- INICIO DE LA TRANSACCIÓN ---
                         $pdo->beginTransaction();
-                        
-                        // 1. Crear o actualizar usuario (Pasamos $pdo para usar la misma conexión)
                         $resultadoUsuario = crearOActualizarUsuarioComerciante($solicitud, $pdo);
                         
                         if (!$resultadoUsuario) {
                             throw new Exception("Error al procesar el usuario.");
                         }
 
-                        // 2. Crear local (Pasamos $pdo y el ID del usuario creado)
+                        // Crear local
                         $localCodigo = crearLocalDesdeSolicitud($solicitud, $resultadoUsuario['id'], $pdo);
                         
                         if ($localCodigo) {
-                            // 3. Actualizar estado de la solicitud a '1' (Aprobada)
                             actualizarEstadoSolicitud($idSolicitud, 1, $pdo);
-                            
-                            // --- CONFIRMAR CAMBIOS (COMMIT) ---
                             $pdo->commit();
-                            
-                            // 4. Enviar email (Esto va fuera de la transacción de BD)
                             $emailEnviado = enviarEmailAprobacion($solicitud, $localCodigo, $resultadoUsuario);
                             
                             $mensaje = "¡Solicitud APROBADA con éxito! ";
@@ -61,7 +51,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             throw new Exception('No se pudo generar el local. Verifique los datos.');
                         }
                     } catch (Exception $e) {
-                        // --- REVERTIR CAMBIOS SI ALGO FALLA (ROLLBACK) ---
                         $pdo->rollBack();
                         $mensaje = 'Error al aprobar: ' . $e->getMessage();
                         $tipoMensaje = 'danger';
@@ -69,12 +58,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     break;
                     
                 case 'rechazar':
-                    // Para rechazar no es estricta la transacción compleja, pero usamos $pdo por consistencia
                     try {
                         if (actualizarEstadoSolicitud($idSolicitud, 2, $pdo)) {
                             enviarEmailRechazo($solicitud);
                             $mensaje = 'Solicitud RECHAZADA exitosamente. Se notificó al usuario.';
-                            $tipoMensaje = 'warning'; // Amarillo para rechazo
+                            $tipoMensaje = 'warning';
                         } else {
                             $mensaje = 'Error al intentar rechazar la solicitud.';
                             $tipoMensaje = 'danger';
@@ -88,18 +76,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
     
-    // Patrón PRG (Post-Redirect-Get) para evitar reenvío de formulario al recargar
     header('Location: AprobarSolicitudes.php?mensaje=' . urlencode($mensaje) . '&tipo=' . $tipoMensaje);
     exit;
 }
 
-// Recuperar mensajes de la URL
 if (isset($_GET['mensaje'])) {
     $mensaje = $_GET['mensaje'];
     $tipoMensaje = $_GET['tipo'] ?? 'info';
 }
 
-// Obtener listas para mostrar (Estas funciones usan su propia conexión de lectura, está bien)
 $solicitudesPendientes = getSolicitudesPendientes();
 $solicitudesAprobadas = getSolicitudesAprobadas();
 $solicitudesRechazadas = getSolicitudesRechazadas();
@@ -197,10 +182,10 @@ $estadisticas = getEstadisticasSolicitudes();
             <div class="d-flex align-items-center ms-auto">
                 <div class="dropdown">
                     <a class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" href="#" id="userDropdown" data-bs-toggle="dropdown">
-                        <span class="me-2">Hola, <strong><?php echo htmlspecialchars($_SESSION['Nombre'] ?? 'Admin'); ?></strong></span>
+                        <span class="me-2"> <strong><?php echo htmlspecialchars($_SESSION['Nombre'] ?? 'Admin'); ?></strong></span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="./DashboardAdministrador.php">Volver al Dashboard</a></li>
+                        <li><a class="dropdown-item" href="./DashboardAdministrador.php">Menu</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item text-danger" href="../Model/logout.php">Cerrar sesión</a></li>
                     </ul>

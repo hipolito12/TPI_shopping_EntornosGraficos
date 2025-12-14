@@ -66,7 +66,6 @@ $solicitudesPendientes = getSolicitudesPendientesPorLocal($idLocal);
     .small-muted { color: var(--muted); font-size: .9rem; }
     .badge-cat { background: rgba(var(--primary-rgb), 0.12); color: var(--primary); font-weight:600; }
 
-    /* Estilos para listas */
     .promocion-item, .solicitud-item {
         border-left: 4px solid var(--primary);
         padding-left: 1rem;
@@ -207,8 +206,8 @@ $solicitudesPendientes = getSolicitudesPendientesPorLocal($idLocal);
                 <a href="./CrearPromocion.php" class="btn btn-primary">
                   <i class="bi bi-plus-circle me-2"></i>Crear Nueva Promoción
                 </a>
-                <a href="./GestionarPromociones.php" class="btn btn-outline-primary">
-                  <i class="bi bi-list-ul me-2"></i>Gestionar Todas las Promociones
+                <a href="./HistorialUsos.php" class="btn btn-outline-primary">
+                  <i class="bi bi-list-ul me-2"></i>Ver clientes interesados
                 </a>
               </div>
             </div>

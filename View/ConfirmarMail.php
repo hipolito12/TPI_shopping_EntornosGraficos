@@ -154,7 +154,7 @@
         }, 1000);
       }
       
-      // Mostrar mensaje en consola para desarrollo
+      // Mensaje de desarrollo
       <?php if (!empty($email)): ?>
         console.log('✅ Cuenta verificada: <?php echo $email; ?>');
       <?php endif; ?>

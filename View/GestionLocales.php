@@ -6,10 +6,8 @@ header("Pragma: no-cache");
 header("Expires: 0");
 require_once '../Model/GestionLocales.php';
 
-
-// Procesar acciones
 $mensaje = '';
-$tipoMensaje = ''; // success, danger, warning
+$tipoMensaje = '';
 $localEdit = null;
 $mostrarModal = false;
 
@@ -25,7 +23,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'ubicacionFK' => $_POST['ubicacionFK']
             ];
             
-            // Validaciones
             if (empty($datos['nombre']) || empty($datos['rubro']) || empty($datos['usuarioFK']) || empty($datos['ubicacionFK'])) {
                 $mensaje = 'Todos los campos son obligatorios.';
                 $tipoMensaje = 'danger';
@@ -220,7 +217,6 @@ $comerciantes = getComerciantes();
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                         <li><a class="dropdown-item" href="./DashboardAdministrador.php">Menu</a></li>
-                        <li><a class="dropdown-item" href="./GestionLocales.php">Gestión de Locales</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item text-danger" href="../Model/logout.php">Cerrar sesión</a></li>
                     </ul>

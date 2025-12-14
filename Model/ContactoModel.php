@@ -14,11 +14,10 @@ function registrarContacto($asunto, $cuerpo) {
     }
 }
 
-// --- AGREGAR DESDE AQUÍ ---
+
 
 function getTodosLosContactos() {
     $pdo = getConnection();
-    // Ordenamos por Estado (0 pendientes primero) y luego por ID descendente (nuevos primero)
     $query = "SELECT * FROM contacto ORDER BY estado ASC, id DESC";
     $stmt = $pdo->prepare($query);
     $stmt->execute();

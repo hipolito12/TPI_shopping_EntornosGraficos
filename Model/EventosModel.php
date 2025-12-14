@@ -1,5 +1,5 @@
 <?php
-// Model/EventosModel.php
+
 include_once(__DIR__ . '/conexion.php');
 
 class EventosModel {

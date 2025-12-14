@@ -1,6 +1,5 @@
 <?php
-// Model/NovedadesModel.php
-// Usa getConnection() y expone funciones simples para novedades.
+
 include_once("../Model/conexion.php");
 
 

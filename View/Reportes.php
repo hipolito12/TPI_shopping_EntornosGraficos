@@ -423,7 +423,7 @@ $crecimientoUsuarios = getCrecimientoUsuarios();
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        /*Cargar todos los graficos de la pagina*/
+        // Gráficos
         const colors = {
             primary: '#4A3BC7',
             success: '#28a745',
@@ -787,7 +787,7 @@ $crecimientoUsuarios = getCrecimientoUsuarios();
             }
         );
 
-        // Auto-refresh cada 5 minutos para datos en tiempo real
+        // Auto-refresh (5min)
         setTimeout(() => {
             window.location.reload();
         }, 300000);

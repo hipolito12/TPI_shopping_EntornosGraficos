@@ -8,7 +8,6 @@
     --primary-very-light: #F8F7FF;
 }
 
-/* Clases de utilidad para la paleta */
 .bg-subtle {
     background-color: var(--subtle) !important;
 }
@@ -21,7 +20,6 @@
     color: var(--primary-dark) !important;
 }
 
-/* FIX: Correcciones para promociones */
 .promo-top {
     height: 44px;
     background: var(--primary);
@@ -46,7 +44,6 @@
     border-bottom-right-radius: 0.5rem;
 }
 
-/* FIX: Estilos para categorías - PALETA PRINCIPAL */
 .category-card {
     transition: all 0.3s ease;
     border: none !important;
@@ -86,7 +83,6 @@
     color: var(--primary-dark);
 }
 
-/* FIX: Mejoras de contraste y legibilidad */
 .card-title {
     color: #23264B !important;
     font-weight: 600;
@@ -99,7 +95,6 @@
     line-height: 1.4;
 }
 
-/* Botones primary personalizados */
 .btn-primary {
     background-color: var(--primary);
     border-color: var(--primary);
@@ -121,7 +116,6 @@
     color: white;
 }
 
-/* Utilidades */
 .border-dashed {
     border: 2px dashed #dee2e6 !important;
 }
@@ -133,7 +127,6 @@
     overflow: hidden;
 }
 
-/* Mejoras de accesibilidad */
 .event-card:focus,
 .category-card:focus {
     outline: 2px solid var(--primary);

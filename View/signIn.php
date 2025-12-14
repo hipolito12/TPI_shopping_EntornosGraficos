@@ -134,9 +134,8 @@
 <?php include dirname(__DIR__) . '/layouts/footer.php'; ?>
 
 <script>
-// Script para mostrar/ocultar contraseña
+// Toggle contraseña
 document.addEventListener('DOMContentLoaded', function() {
-    // Función para alternar la visibilidad de la contraseña
     function setupPasswordToggle(toggleButtonId, passwordInputId) {
         const toggleButton = document.getElementById(toggleButtonId);
         const passwordInput = document.getElementById(passwordInputId);
@@ -144,11 +143,9 @@ document.addEventListener('DOMContentLoaded', function() {
         
         if (toggleButton && passwordInput) {
             toggleButton.addEventListener('click', function() {
-                // Cambiar el tipo de input
                 const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
                 passwordInput.setAttribute('type', type);
                 
-                // Cambiar el icono
                 if (type === 'text') {
                     icon.classList.remove('bi-eye');
                     icon.classList.add('bi-eye-slash');
@@ -160,7 +157,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
             
-            // Mejorar accesibilidad - permitir activar con espacio/enter
+            // Teclado
             toggleButton.addEventListener('keydown', function(e) {
                 if (e.key === ' ' || e.key === 'Enter' || e.key === 'Spacebar') {
                     e.preventDefault();
@@ -170,14 +167,12 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Configurar ambos campos de contraseña
     setupPasswordToggle('togglePassword', 'password');
     setupPasswordToggle('togglePassword2', 'password2');
 });
 
-// Limpiar campos al hacer reset
+// Reset campos
 document.getElementById('btnReset')?.addEventListener('click', function() {
-    // Restaurar los ojitos a su estado original
     const toggleButtons = document.querySelectorAll('.password-toggle');
     toggleButtons.forEach(button => {
         const icon = button.querySelector('i');

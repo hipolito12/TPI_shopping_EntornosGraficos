@@ -1,5 +1,4 @@
 <?php
-  // 1. Definición de la Ruta Base
   $BASE = '/TPIShopping/';
 
   // Verificación de sesión segura
@@ -7,20 +6,16 @@
       session_start();
   }
 
-  // 2. Configuración por defecto (Usuario NO logueado)
   $textoBoton = "Ingresar";
   $linkBoton = $BASE . "View/login.php";
   $iconoBoton = "bi-box-arrow-in-right";
   $idBoton = "btnLogin"; 
 
-  // 3. Si el usuario ESTÁ logueado
   if (isset($_SESSION['IDusuario']) && isset($_SESSION['Rol'])) {
       
-      // --- CAMBIO AQUÍ: Agregamos el nombre del usuario al botón ---
-      // Usamos htmlspecialchars por seguridad y un operador ?? por si el nombre está vacío
+      
       $nombreUsuario = htmlspecialchars($_SESSION['Nombre'] ?? '');
       $textoBoton = "Menu $nombreUsuario"; 
-      // -----------------------------------------------------------
 
       $iconoBoton = "bi-person-circle";
       $idBoton = "btnDashboard"; 

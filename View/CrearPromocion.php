@@ -176,8 +176,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                         <li><a class="dropdown-item" href="./DashBoardLocal.php">Inicio</a></li>
-                        <li><a class="dropdown-item" href="./CrearPromocion.php">Crear Promoción</a></li>
-                        <li><a class="dropdown-item" href="./GestionarPromociones.php">Gestionar Promociones</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item text-danger" href="../Model/logout.php">Cerrar sesión</a></li>
                     </ul>

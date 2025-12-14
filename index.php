@@ -59,7 +59,6 @@ if (isset($_SESSION['IDusuario'])): ?>
             box-shadow: 0 0.5rem 1rem rgba(var(--primary-rgb), 0.15);
             border-color: var(--primary);
         }
-        /* FIX: Corrección para promociones destacadas */
         .promo-top {
             height: 44px;
             background: var(--primary);
@@ -74,7 +73,6 @@ if (isset($_SESSION['IDusuario'])): ?>
             padding: 0.375rem 0.75rem;
             border-radius: 0.375rem;
         }
-        /* FIX: Asegurar que el contenido de la card sea visible */
         .promo-card .card-body {
             padding: 1rem;
             background: white;

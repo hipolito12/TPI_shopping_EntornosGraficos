@@ -26,7 +26,7 @@
   dni:      /^\d{8}$/,                                  
   telefono: /^\d{7,20}$/                                
 };
-  // Validadores --> stackoverflow
+  // Validadores
   const setValid = (input, ok) => {
     input.classList.toggle('is-valid', ok);
     input.classList.toggle('is-invalid', !ok);

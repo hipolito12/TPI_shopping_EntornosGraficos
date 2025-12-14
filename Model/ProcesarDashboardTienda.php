@@ -1,7 +1,6 @@
 <?php
 require_once '../Model/conexion.php';
 
-// Obtener el local del dueño
 function getLocalPorUsuario($idUsuario) {
     $pdo = getConnection();
     $query = "SELECT IDlocal, nombre, rubro FROM local WHERE usuarioFK = ?";
@@ -10,7 +9,6 @@ function getLocalPorUsuario($idUsuario) {
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
-// Obtener promociones del local (solo activas)
 function getPromocionesPorLocal($idLocal) {
     $pdo = getConnection();
     $query = "
@@ -34,7 +32,6 @@ function getPromocionesPorLocal($idLocal) {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-// Obtener solicitudes pendientes
 function getSolicitudesPendientesPorLocal($idLocal) {
     $pdo = getConnection();
     $query = "
@@ -57,17 +54,14 @@ function getSolicitudesPendientesPorLocal($idLocal) {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-// Obtener estadísticas del local
 function getEstadisticasLocal($idLocal) {
     $pdo = getConnection();
     
-    // Total promociones activas
     $query1 = "SELECT COUNT(*) as total FROM promocion WHERE localFk = ? AND estado = 1 AND CURDATE() BETWEEN desde AND hasta";
     $stmt1 = $pdo->prepare($query1);
     $stmt1->execute([$idLocal]);
     $activas = $stmt1->fetch(PDO::FETCH_ASSOC);
     
-    // Solicitudes pendientes
     $query2 = "
         SELECT COUNT(*) as total 
         FROM usopromocion up 
@@ -78,7 +72,6 @@ function getEstadisticasLocal($idLocal) {
     $stmt2->execute([$idLocal]);
     $pendientes = $stmt2->fetch(PDO::FETCH_ASSOC);
     
-    // Total usos aceptados
     $query3 = "
         SELECT COUNT(*) as total 
         FROM usopromocion up 

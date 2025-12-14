@@ -64,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             break;
     }
     
-    // Redirigir para evitar reenvío del formulario
+    // PRG redirect
     header('Location: GestionNovedades.php?mensaje=' . urlencode($mensaje) . '&tipo=' . $tipoMensaje);
     exit;
 }
@@ -230,11 +230,7 @@ $estadisticas = getEstadisticasNovedades();
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                         <li><a class="dropdown-item" href="./DashboardAdministrador.php">Menu</a></li>
-                        <li><a class="dropdown-item" href="./GestionLocales.php">Gestión de Locales</a></li>
-                        <li><a class="dropdown-item" href="./AprobarSolicitudes.php">Aprobar Solicitudes</a></li>
-                        <li><a class="dropdown-item" href="./AprobarPromociones.php">Aprobar Promociones</a></li>
-                        <li><a class="dropdown-item active" href="./GestionNovedades.php">Gestión de Novedades</a></li>
-                        <li><a class="dropdown-item" href="./Reportes.php">Reportes</a></li>
+                     
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item text-danger" href="../Model/logout.php">Cerrar sesión</a></li>
                     </ul>

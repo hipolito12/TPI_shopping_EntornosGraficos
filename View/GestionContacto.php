@@ -63,7 +63,6 @@ foreach ($contactos as $c) {
         .estado-pendiente { background-color: #ffc107; color: #000; }
         .estado-cerrado { background-color: #198754; color: #fff; }
         
-        /* Truncar texto largo en la tabla */
         .text-truncate-2 {
             display: -webkit-box;
             -webkit-line-clamp: 2;
@@ -140,7 +139,7 @@ foreach ($contactos as $c) {
                             <p class="text-muted small">Gestiona los mensajes y reclamos de los usuarios.</p>
                         </div>
                         <a href="./DashboardAdministrador.php" class="btn btn-outline-secondary">
-                            <i class="bi bi-arrow-left me-2"></i>Volver al Dashboard
+                            <i class="bi bi-arrow-left me-2"></i>Volver menu
                         </a>
                     </div>
 

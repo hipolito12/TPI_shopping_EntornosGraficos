@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         .btn-primary-custom {
-            background-color: #4A3BC7; /* Hardcoded por si la variable falla */
+            background-color: #4A3BC7;
             border-color: #4A3BC7;
             color: white;
             transition: all 0.3s ease;

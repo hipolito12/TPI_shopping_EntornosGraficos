@@ -40,8 +40,8 @@ try {
             error('El email no es válido o no coinciden.');
         }
 
-       if(ExisteUsuario(username: $nombreCompleto,email: $email)==true ) {
-            error(" Mail ya registrado");
+       if (ExisteUsuario(username: $nombreCompleto, email: $email) == true) {
+            error('El email ya está registrado.');
         }
 
 
@@ -62,18 +62,28 @@ try {
         }
 
          $id=insertarUsuario($nombreCompleto,$email,$pwd,$tel,$sexo,$dni);
-        EnviaMail($email);//mail hardcodeado--> generadoe con https://temp-mail.org/es/
+        // Email de prueba (temporal)
+        $sendmail = new Sendmail();
+        $enviado = $sendmail->EnviaMail($email);
 
-        echo json_encode([
-            'ok' => true,
-            'redirect' => "../View/MailSent.php",
-            'message' => 'Datos validados correctamente.'
-        ]);
+        if ($enviado) {
+            echo json_encode([
+                'ok' => true,
+                'redirect' => "../View/MailSent.php",
+                'message' => 'Datos validados correctamente.'
+            ], JSON_UNESCAPED_UNICODE);
+        } else {
+            echo json_encode([
+                'ok' => false,
+                'message' => 'Error al enviar correo. Intenta nuevamente.'
+            ], JSON_UNESCAPED_UNICODE);
+        }
+      
     }
 } catch (Exception $e) {
     echo json_encode([
         'ok' => false,
         'message' => $e->getMessage()
-    ]);
+    ], JSON_UNESCAPED_UNICODE);
 }
 ?>

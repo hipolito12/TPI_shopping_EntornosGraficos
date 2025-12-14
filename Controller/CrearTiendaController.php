@@ -12,7 +12,7 @@ header('X-Content-Type-Options: nosniff');
 
 if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
   http_response_code(405);
-  echo json_encode(['ok' => false, 'message' => 'Método no permitido']);
+  echo json_encode(['ok' => false, 'message' => 'Método no permitido'], JSON_UNESCAPED_UNICODE);
   exit;
 }
 

@@ -509,12 +509,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Variables globales para la promoción seleccionada
-        let selectedPromotion = null;
-        let selectedButton = null;
-        let currentPromotionDetails = null;
+        let selectedPromo = null;
+        let selButton = null;
+        let promoDetails = null;
 
-        // Mostrar alerta
         function showAlert(message, type = 'success') {
             const alertContainer = document.getElementById('alertContainer');
             const alert = document.createElement('div');
@@ -524,44 +522,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             `;
             alertContainer.appendChild(alert);
-            
-            // Auto-remover después de 5 segundos
-            setTimeout(() => {
-                if (alert.parentNode) {
-                    alert.remove();
-                }
-            }, 5000);
+            setTimeout(() => { if (alert.parentNode) alert.remove(); }, 5000);
         }
 
-        // Usar promoción via AJAX
         function usePromotion(promocionId, localId, button) {
             const formData = new FormData();
             formData.append('usar_promocion', 'true');
             formData.append('promocion_id', promocionId);
             formData.append('local_id', localId);
 
-            // Mostrar estado de carga
             if (button) {
                 button.disabled = true;
                 button.innerHTML = '⌛ Enviando...';
             }
 
-            fetch('PromocionesCliente.php', {
-                method: 'POST',
-                body: formData
-            })
+            fetch('PromocionesCliente.php', { method: 'POST', body: formData })
             .then(response => response.json())
             .then(data => {
-                if (data.success) {
+                if (data.ok || data.success) {
                     showAlert(data.message, 'success');
-                    // Cambiar el botón a estado "pendiente"
                     if (button) {
                         button.disabled = true;
                         button.innerHTML = '⏳ Pendiente';
                         button.classList.remove('btn-primary-custom');
                         button.classList.add('btn-pending');
                     }
-                    // Actualizar también el botón en el modal de detalles
                     const usarDesdeDetallesBtn = document.getElementById('usarDesdeDetalles');
                     if (usarDesdeDetallesBtn) {
                         usarDesdeDetallesBtn.disabled = true;
@@ -569,17 +554,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         usarDesdeDetallesBtn.classList.remove('btn-primary-custom');
                         usarDesdeDetallesBtn.classList.add('btn-pending');
                     }
-                    
-                    // Ocultar la card después de un tiempo (opcional)
                     setTimeout(() => {
                         if (button && button.closest('.col-md-6, .col-lg-4')) {
                             button.closest('.col-md-6, .col-lg-4').style.display = 'none';
                         }
                     }, 2000);
-                    
                 } else {
                     showAlert(data.message, 'danger');
-                    // Rehabilitar el botón
                     if (button) {
                         button.disabled = false;
                         button.innerHTML = '🛒 Solicitar';
@@ -596,103 +577,66 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             });
         }
 
-        // Event listeners cuando el DOM está cargado
         document.addEventListener('DOMContentLoaded', function() {
-            // Manejar clic en botones de usar promoción
             document.querySelectorAll('.usar-promocion-btn').forEach(button => {
                 button.addEventListener('click', function() {
                     const promocionId = this.getAttribute('data-promocion-id');
                     const localId = this.getAttribute('data-local-id');
                     const descripcion = this.getAttribute('data-descripcion');
-                    
-                    selectedPromotion = { promocionId, localId, descripcion };
-                    selectedButton = this;
-                    
-                    // Mostrar modal de confirmación
+                    selectedPromo = { promocionId, localId, descripcion };
+                    selButton = this;
                     document.getElementById('promo-details').textContent = descripcion;
                     const modal = new bootstrap.Modal(document.getElementById('confirmModal'));
                     modal.show();
                 });
             });
-            
-            // Manejar clic en botones de detalles
+
             document.querySelectorAll('.detalles-promocion-btn').forEach(button => {
                 button.addEventListener('click', function() {
                     const promocionData = JSON.parse(this.getAttribute('data-promocion'));
                     const localData = JSON.parse(this.getAttribute('data-local'));
-                    
-                    currentPromotionDetails = promocionData;
-                    
-                    // Llenar el modal de detalles
+                    promoDetails = promocionData;
                     document.getElementById('detalle-titulo').textContent = promocionData.descripcion_promo;
                     document.getElementById('detalle-descripcion').textContent = promocionData.descripcion_promo;
-                    
-                    // Categoría con badge colorizado
                     const categoriaBadge = document.getElementById('detalle-categoria');
                     categoriaBadge.textContent = promocionData.categoria_requerida;
                     categoriaBadge.className = `badge badge-${promocionData.categoria_requerida.toLowerCase()}`;
-                    
-                    // Vigencia
                     const desde = new Date(promocionData.fecha_desde).toLocaleDateString();
                     const hasta = new Date(promocionData.fecha_hasta).toLocaleDateString();
                     document.getElementById('detalle-vigencia').textContent = `Desde ${desde} hasta ${hasta}`;
-                    
-                    // Días aplicables
                     const diasSemana = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
                     const diaTexto = promocionData.dia_promo ? diasSemana[promocionData.dia_promo - 1] : 'Todos los días';
                     document.getElementById('detalle-dias').textContent = diaTexto;
-                    
-                    // ID de promoción
                     document.getElementById('detalle-id').textContent = promocionData.id_promocion;
-                    
-                    // Información del local
                     document.getElementById('detalle-local-nombre').textContent = localData.nombre;
                     document.getElementById('detalle-local-rubro').textContent = localData.rubro;
                     document.getElementById('detalle-local-ubicacion').textContent = localData.ubicacion;
                     document.getElementById('detalle-local-id').textContent = promocionData.codigo_local;
-                    
-                    // Mostrar modal de detalles
                     const modal = new bootstrap.Modal(document.getElementById('detallesModal'));
                     modal.show();
                 });
             });
-            
-            // Confirmar uso en el modal de confirmación
+
             document.getElementById('confirmUseBtn').addEventListener('click', function() {
-                if (selectedPromotion && selectedButton) {
-                    usePromotion(
-                        selectedPromotion.promocionId, 
-                        selectedPromotion.localId, 
-                        selectedButton
-                    );
-                    
-                    // Cerrar modal
+                if (selectedPromo && selButton) {
+                    usePromotion(selectedPromo.promocionId, selectedPromo.localId, selButton);
                     const modal = bootstrap.Modal.getInstance(document.getElementById('confirmModal'));
                     modal.hide();
                 }
             });
-            
-            // Usar promoción desde el modal de detalles
+
             document.getElementById('usarDesdeDetalles').addEventListener('click', function() {
-                if (currentPromotionDetails) {
-                    usePromotion(
-                        currentPromotionDetails.id_promocion, 
-                        currentPromotionDetails.codigo_local, 
-                        this
-                    );
-                    
-                    // Cerrar modal de detalles
+                if (promoDetails) {
+                    usePromotion(promoDetails.id_promocion, promoDetails.codigo_local, this);
                     const modal = bootstrap.Modal.getInstance(document.getElementById('detallesModal'));
                     modal.hide();
                 }
             });
-            
-            // Prevenir envío doble del formulario de búsqueda
+
             document.getElementById('searchForm')?.addEventListener('submit', function() {
                 const submitBtn = this.querySelector('button[type="submit"]');
                 submitBtn.disabled = true;
                 submitBtn.innerHTML = 'Buscando...';
-                
                 setTimeout(() => {
                     submitBtn.disabled = false;
                     submitBtn.innerHTML = 'Buscar Promociones';

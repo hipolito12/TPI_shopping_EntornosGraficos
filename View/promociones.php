@@ -44,9 +44,9 @@ function formatearDias($valor) {
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 <style>
-  :root{ --bs-primary:#4A3BC7; }              /* tu primary */
-  .bg-subtle{ background-color:#F3F1FF; }     /* tu subtle */
-  .section-pad{ padding-block: 2.25rem; }     /* separa de navbar y footer */
+  :root{ --bs-primary:#4A3BC7; }
+  .bg-subtle{ background-color:#F3F1FF; }
+  .section-pad{ padding-block: 2.25rem; }
   .promo-card{ border:1px solid rgba(74,59,199,.10); border-radius:16px; }
   .promo-card:hover{ box-shadow:0 14px 40px rgba(74,59,199,.10); }
   .badge-soft{ background:rgba(74,59,199,.08); color:#4A3BC7; }
@@ -148,7 +148,10 @@ function formatearDias($valor) {
           <div id="modalCategorias" class="d-flex flex-wrap gap-2"></div>
         </div>
         <div class="modal-footer">
-          <a href="./login.php" class="btn btn-outline-secondary">Iniciar sesión</a>
+          <?php if (!isset($_SESSION['IDusuario'])): ?>
+              <a href="./login.php" class="btn btn-outline-secondary">Iniciar sesión</a>
+          <?php endif; ?>
+          
           <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cerrar</button>
         </div>
       </div>

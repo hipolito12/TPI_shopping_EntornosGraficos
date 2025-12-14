@@ -81,25 +81,21 @@ function getEstadisticasPromociones() {
     
     $stats = [];
     
-    // Promociones pendientes
     $query = "SELECT COUNT(*) as total FROM promocion WHERE estado = '0'";
     $stmt = $pdo->prepare($query);
     $stmt->execute();
     $stats['pendientes'] = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
     
-    // Promociones aprobadas (total)
     $query = "SELECT COUNT(*) as total FROM promocion WHERE estado = '1'";
     $stmt = $pdo->prepare($query);
     $stmt->execute();
     $stats['aprobadas_total'] = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
     
-    // Promociones rechazadas (total)
     $query = "SELECT COUNT(*) as total FROM promocion WHERE estado = '2'";
     $stmt = $pdo->prepare($query);
     $stmt->execute();
     $stats['rechazadas_total'] = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
     
-    // Promociones activas (vigentes)
     $query = "SELECT COUNT(*) as total FROM promocion WHERE estado = '1' AND hasta >= CURDATE()";
     $stmt = $pdo->prepare($query);
     $stmt->execute();

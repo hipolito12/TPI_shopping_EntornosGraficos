@@ -8,7 +8,6 @@ class PromocionesModel {
         $this->pdo = getConnection();
     }
 
-    // Obtener promociones usadas por un usuario
     public function getPromocionesUsadas($usuario_id) {
         $query = "
             SELECT promoFK 
@@ -20,23 +19,19 @@ class PromocionesModel {
         return $stmt->fetchAll(PDO::FETCH_COLUMN);
     }
 
-    // Obtener promociones disponibles con filtros
     public function getPromocionesDisponibles($usuario_id, $categoria_usuario, $codigo_busqueda = null) {
-        // 1. MEJORA: Definir niveles en minúsculas para evitar errores de mayúsculas/minúsculas
+        // Niveles de categoría
         $niveles_categoria = [
             'inicial' => 1,
             'medium' => 2,
             'premium' => 3,
         ];
         
-        // Convertimos la categoría del usuario a minúsculas
         $cat_usuario_lower = strtolower($categoria_usuario);
         $nivel_usuario = $niveles_categoria[$cat_usuario_lower] ?? 1;
-
-        // Obtener promociones ya usadas para excluirlas
+        // Promociones usadas
         $promociones_usadas = $this->getPromocionesUsadas($usuario_id);
 
-        // 2. Consulta Base
         $query = "
             SELECT 
                 l.IDlocal as codigo_local,
@@ -59,9 +54,8 @@ class PromocionesModel {
 
         $params = [];
 
-        // 3. CORRECCIÓN IMPORTANTE: Búsqueda por NOMBRE o CÓDIGO
         if (!empty($codigo_busqueda)) {
-            // El usuario busca texto, puede ser el nombre o el código
+            
             $query .= " AND (l.nombre LIKE ? OR l.codigo LIKE ?) ";
             $term = '%' . $codigo_busqueda . '%';
             $params[] = $term;
@@ -74,10 +68,9 @@ class PromocionesModel {
         $stmt->execute($params);
         $promociones = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        // 4. Filtrado lógico (Nivel y Uso)
-        $promociones_filtradas = [];
+        $promociones_filtradas = []; 
         foreach ($promociones as $promo) {
-            // Normalizamos la categoría de la promoción también
+            // Normalizamos la categoría de la promoción
             $cat_promo_lower = strtolower($promo['categoria_requerida']);
             $nivel_promo = $niveles_categoria[$cat_promo_lower] ?? 1;
             
@@ -87,17 +80,17 @@ class PromocionesModel {
             }
         }
 
-        // Agrupar por local (Usando IDlocal como clave)
+        // Agrupar por local
         $locales_con_promociones = [];
         foreach ($promociones_filtradas as $promo) {
-            $local_id = $promo['codigo_local']; // Esto es IDlocal (int) según el alias de la query
+            $local_id = $promo['codigo_local'];
             
             if (!isset($locales_con_promociones[$local_id])) {
                 $locales_con_promociones[$local_id] = [
                     'nombre' => $promo['nombre_local'],
                     'rubro' => $promo['rubro_local'],
                     'ubicacion' => $promo['ubicacion_nombre'],
-                    'codigo_visible' => $promo['codigo_real_local'], // Guardamos el código real por si se quiere mostrar
+                    'codigo_visible' => $promo['codigo_real_local'],
                     'promociones' => []
                 ];
             }
@@ -107,9 +100,8 @@ class PromocionesModel {
         return $locales_con_promociones;
     }
 
-    // Registrar uso de promoción
     public function usarPromocion($usuario_id, $promocion_id) {
-        // Verificar que la promoción existe y está vigente
+        // Verificar promoción vigente
         $query_verificar = "
             SELECT p.IDpromocion 
             FROM promocion p
@@ -123,7 +115,7 @@ class PromocionesModel {
         $promocion_valida = $stmt->fetch();
         
         if (!$promocion_valida) {
-            return ['success' => false, 'message' => 'La promoción ya no está disponible o ha vencido.'];
+            return ['ok' => false, 'message' => 'La promoción ya no está disponible o ha vencido.'];
         }
 
         // Verificar si ya usó esta promoción
@@ -135,7 +127,7 @@ class PromocionesModel {
         $stmt_uso->execute([$usuario_id, $promocion_id]);
         
         if ($stmt_uso->fetch()) {
-            return ['success' => false, 'message' => 'Ya has solicitado esta promoción anteriormente.'];
+            return ['ok' => false, 'message' => 'Ya has solicitado esta promoción anteriormente.'];
         }
 
         // Registrar el uso
@@ -146,9 +138,9 @@ class PromocionesModel {
         $stmt_insert = $this->pdo->prepare($query_insert);
         
         if ($stmt_insert->execute([$usuario_id, $promocion_id])) {
-            return ['success' => true, 'message' => '¡Solicitud enviada! El local debe aceptarla.'];
+            return ['ok' => true, 'message' => '¡Solicitud enviada! El local debe aceptarla.'];
         } else {
-            return ['success' => false, 'message' => 'Error al registrar la solicitud.'];
+            return ['ok' => false, 'message' => 'Error al registrar la solicitud.'];
         }
     }
 

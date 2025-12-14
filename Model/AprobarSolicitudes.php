@@ -1,6 +1,11 @@
 <?php
 require_once __DIR__ . '/conexion.php';
-
+require_once __DIR__ . '/PHPMailer/Exception.php';
+require_once __DIR__ . '/PHPMailer/PHPMailer.php';
+require_once __DIR__ . '/PHPMailer/SMTP.php';
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
 function getSolicitudesPendientes() {
     $pdo = getConnection();
     $query = "
@@ -136,7 +141,10 @@ function actualizarEstadoSolicitud($idSolicitud, $estado, $pdo) {
 
 function enviarEmailAprobacion($solicitud, $localCodigo, $credenciales) {
     $destinatario = $solicitud['email'];
-    $asunto = "✅ Tu solicitud ha sido aprobada - ShoppingGenerico";
+    $asunto = "✅ Tu solicitud ha sido aprobada - Shopping UTN";
+    
+    // Detectamos el dominio automáticamente (localhost o tu web en Infinity)
+    $dominio = $_SERVER['HTTP_HOST'] ?? 'localhost';
     
     $mensajeAccion = ($credenciales['accion'] == 'actualizado') 
         ? "Tu cuenta existente ha sido actualizada a comerciante." 
@@ -144,17 +152,27 @@ function enviarEmailAprobacion($solicitud, $localCodigo, $credenciales) {
     
     $mensaje = "
     <html>
-    <body>
-        <h2>¡Felicidades, {$solicitud['nombre']}!</h2>
-        <p>Tu solicitud ha sido aprobada.</p>
+    <body style='font-family: Arial, sans-serif;'>
+        <h2 style='color: #4A3BC7;'>¡Felicidades, {$solicitud['nombre']}!</h2>
+        <p>Nos alegra informarte que <strong>tu solicitud ha sido aprobada</strong>.</p>
         <p>{$mensajeAccion}</p>
-        <h3>Tus Credenciales:</h3>
-        <p>Email: {$credenciales['email']}</p>
-        <p>Contraseña: (La que ingresaste en la solicitud)</p>
-        <h3>Tu Local:</h3>
-        <p>Nombre: {$solicitud['nombreLocal']}</p>
-        <p>Código: {$localCodigo}</p>
-        <p><a href='http://localhost/ShoppingGenerico/login.php'>Iniciar Sesión</a></p>
+        
+        <div style='background-color: #f8f9fa; padding: 15px; border-left: 4px solid #4A3BC7; margin: 20px 0;'>
+            <h3 style='margin-top: 0;'>Tus Credenciales:</h3>
+            <p><strong>Email:</strong> {$credenciales['email']}</p>
+            <p><strong>Contraseña:</strong> (La que ingresaste en el formulario de solicitud)</p>
+            
+            <h3 style='margin-bottom: 5px;'>Tu Local:</h3>
+            <p><strong>Nombre:</strong> {$solicitud['nombreLocal']}</p>
+            <p><strong>Código:</strong> {$localCodigo}</p>
+        </div>
+
+        <p style='text-align: center;'>
+            <a href='http://{$dominio}/TPIShopping/View/login.php' 
+               style='background-color: #4A3BC7; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;'>
+               Iniciar Sesión
+            </a>
+        </p>
     </body>
     </html>
     ";
@@ -164,18 +182,53 @@ function enviarEmailAprobacion($solicitud, $localCodigo, $credenciales) {
 
 function enviarEmailRechazo($solicitud) {
     $destinatario = $solicitud['email'];
-    $asunto = "❌ Actualización sobre tu solicitud";
-    $mensaje = "Hola {$solicitud['nombre']}, lamentamos informar que tu solicitud no ha sido aprobada.";
+    $asunto = "❌ Actualización sobre tu solicitud - Shopping UTN";
+    
+    $mensaje = "
+    <html>
+    <body style='font-family: Arial, sans-serif;'>
+        <h3>Hola {$solicitud['nombre']},</h3>
+        <p>Gracias por tu interés en formar parte de Shopping UTN.</p>
+        <p style='color: #dc3545;'>Lamentamos informar que tu solicitud no ha sido aprobada en esta ocasión.</p>
+        <p>Si tienes dudas, puedes ponerte en contacto con nosotros a través de la sección de soporte.</p>
+    </body>
+    </html>";
+    
     return enviarEmail($destinatario, $asunto, $mensaje);
 }
 
+// --- FUNCIÓN ADAPTADA PARA USAR PHPMAILER ---
 function enviarEmail($destinatario, $asunto, $mensaje) {
-    $headers = "MIME-Version: 1.0" . "\r\n";
-    $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-    $headers .= "From: no-reply@shoppinggenerico.com" . "\r\n";
-    return mail($destinatario, $asunto, $mensaje, $headers);
-}
+    $mail = new PHPMailer(true);
 
+    try {
+        // Configuración del Servidor (Datos de tu sendmail.ini)
+        $mail->isSMTP();
+        $mail->Host       = 'smtp.gmail.com';
+        $mail->SMTPAuth   = true;
+        $mail->Username   = 'labarbahipolito3@gmail.com';
+        $mail->Password   = 'dzgr hgxl dnci guei';
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port       = 587;
+        $mail->CharSet    = 'UTF-8';
+
+        // Remitente y Destinatario
+        $mail->setFrom('labarbahipolito3@gmail.com', 'Shopping UTN');
+        $mail->addAddress($destinatario);
+
+        // Contenido
+        $mail->isHTML(true);
+        $mail->Subject = $asunto;
+        $mail->Body    = $mensaje;
+
+        $mail->send();
+        return true;
+    } catch (Exception $e) {
+        // Registrar el error para diagnóstico
+        error_log('Error al enviar correo: ' . $e->getMessage());
+        return false;
+    }
+}
 function getEstadisticasSolicitudes() {
     $pdo = getConnection();
     $stats = [];

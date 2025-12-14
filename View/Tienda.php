@@ -180,7 +180,7 @@ function h($v){ return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8'); }
       }
     });
 
-    // Poblar modal desde data-* del botón "Ver detalles"
+    // Poblar modal
     const tiendaModal = document.getElementById('tiendaModal');
     tiendaModal.addEventListener('show.bs.modal', (ev) => {
       const b = ev.relatedTarget, get = (a) => b?.getAttribute(a) || '';

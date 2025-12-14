@@ -1,9 +1,30 @@
 <?php
 require_once '../Model/conexion.php';
+function getLocalesPaginados($limit, $offset) {
+    $pdo = getConnection();
+    $query = "
+        SELECT  distinct l.*, u.nombreUsuario as dueño, ub.nombre as ubicacion_nombre 
+        FROM local l 
+        LEFT JOIN usuario u ON l.usuarioFK = u.IDusuario 
+        LEFT JOIN ubicacion ub ON l.ubicacionFK = ub.IDubicacion 
+        ORDER BY l.nombre
+        LIMIT :limit OFFSET :offset
+    ";
+    $stmt = $pdo->prepare($query);
+    $stmt->bindValue(':limit', (int)$limit, PDO::PARAM_INT);
+    $stmt->bindValue(':offset', (int)$offset, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 
-
-
-// Funciones para la gestión de locales
+function getTotalLocales() {
+    $pdo = getConnection();
+    $query = "SELECT COUNT(*) as total FROM local";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $result['total'] ?? 0;
+}
 function getLocalesCompletos() {
     $pdo = getConnection();
     $query = "
@@ -53,7 +74,6 @@ function getLocalById($id) {
 function crearLocal($datos) {
     $pdo = getConnection();
     
-    // Generar código único para el local
     $codigo = 'LOCAL_' . strtoupper(uniqid());
     
     $query = "INSERT INTO local (nombre, rubro, usuarioFK, ubicacionFK, codigo) VALUES (?, ?, ?, ?, ?)";
@@ -83,7 +103,6 @@ function actualizarLocal($id, $datos) {
 function eliminarLocal($id) {
     $pdo = getConnection();
     
-    // Verificar si hay promociones activas
     $queryCheck = "SELECT COUNT(*) as total FROM promocion WHERE localFk = ? AND estado = 1";
     $stmtCheck = $pdo->prepare($queryCheck);
     $stmtCheck->execute([$id]);

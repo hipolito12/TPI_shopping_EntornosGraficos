@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $local = getLocalPorUsuario($idUsuario);
     
     if (!$local) {
-        echo json_encode(['success' => false, 'message' => 'No se encontró el local.']);
+        echo json_encode(['ok' => false, 'message' => 'No se encontró el local.'], JSON_UNESCAPED_UNICODE);
         exit;
     }
     
@@ -19,9 +19,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             case 'eliminar_promocion':
                 $idPromocion = $_POST['idPromocion'];
                 if (eliminarPromocion($idPromocion, $idLocal)) {
-                    echo json_encode(['success' => true, 'message' => 'Promoción desactivada correctamente.']);
+                    echo json_encode(['ok' => true, 'message' => 'Promoción desactivada correctamente.'], JSON_UNESCAPED_UNICODE);
                 } else {
-                    echo json_encode(['success' => false, 'message' => 'Error al desactivar la promoción.']);
+                    echo json_encode(['ok' => false, 'message' => 'Error al desactivar la promoción.'], JSON_UNESCAPED_UNICODE);
                 }
                 exit;
 
@@ -29,9 +29,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $usuarioFk = $_POST['usuarioFk'];
                 $promoFK = $_POST['promoFK'];
                 if (actualizarEstadoSolicitud($usuarioFk, $promoFK, 1)) {
-                    echo json_encode(['success' => true, 'message' => 'Solicitud aceptada.']);
+                    echo json_encode(['ok' => true, 'message' => 'Solicitud aceptada.'], JSON_UNESCAPED_UNICODE);
                 } else {
-                    echo json_encode(['success' => false, 'message' => 'Error al aceptar la solicitud.']);
+                    echo json_encode(['ok' => false, 'message' => 'Error al aceptar la solicitud.'], JSON_UNESCAPED_UNICODE);
                 }
                 exit;
 
@@ -39,9 +39,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $usuarioFk = $_POST['usuarioFk'];
                 $promoFK = $_POST['promoFK'];
                 if (actualizarEstadoSolicitud($usuarioFk, $promoFK, 2)) {
-                    echo json_encode(['success' => true, 'message' => 'Solicitud rechazada.']);
+                    echo json_encode(['ok' => true, 'message' => 'Solicitud rechazada.'], JSON_UNESCAPED_UNICODE);
                 } else {
-                    echo json_encode(['success' => false, 'message' => 'Error al rechazar la solicitud.']);
+                    echo json_encode(['ok' => false, 'message' => 'Error al rechazar la solicitud.'], JSON_UNESCAPED_UNICODE);
                 }
                 exit;
         }

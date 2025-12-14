@@ -4,7 +4,7 @@ include_once('../Model/ProcesarLogin.php');
 header('Content-Type: application/json; charset=utf-8');
 
 function error($mensaje) {
-    echo json_encode(['ok' => false, 'message' => $mensaje]);
+    echo json_encode(['ok' => false, 'message' => $mensaje], JSON_UNESCAPED_UNICODE);
     exit;
 }
 
@@ -33,20 +33,20 @@ try {
 
             switch($user['rol_id']) {
                 case 0:
-                    $Ruta = 'DashboardAdministrador.php';
+                    $ruta = 'DashboardAdministrador.php';
                     break;
                 case 1:
-                    $Ruta = 'DashBoardCliente.php';
+                    $ruta = 'DashBoardCliente.php';
                     break;
                 case 2:
-                    $Ruta = 'DashboardTienda.php';
+                    $ruta = 'DashboardTienda.php';
                     break;
             }
             echo json_encode([
                 'ok' => true,
                 'message' => 'Inicio de sesión exitoso.',
-                'redirect' => '../View/'.$Ruta.'' 
-            ]);
+                'redirect' => '../View/'.$ruta
+            ], JSON_UNESCAPED_UNICODE);
         } else {
            
             error('Email o contraseña incorrectos.');

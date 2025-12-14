@@ -32,12 +32,10 @@ function saveStoreRequest(array $data) {
     ]);
 
     if (!$ok) {
-        // Ejecutó pero no OK → devolvemos estructura de error de negocio
         return ['ok' => false, 'message' => 'No se pudo insertar la solicitud.', 'errors' => ['general' => 'Fallo al insertar.']];
     }
 
     $id = (int)$pdo->lastInsertId();
-    // Si tu tabla no es AUTO_INCREMENT, podrías retornar true; pero es mejor devolver el ID:
     return $id;
 }
 
@@ -61,6 +59,6 @@ function getUbicaciones(): array {
         return is_array($rows) ? $rows : [];
     } catch (Throwable $e) {
         error_log('getUbicaciones: '.$e->getMessage());
-        return []; 
+        return [];
     }
 }

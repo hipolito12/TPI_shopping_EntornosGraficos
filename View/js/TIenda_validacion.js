@@ -1,6 +1,4 @@
-// tienda_validar.js
-// Validación cliente "en vivo" para crear_tienda.php con Bootstrap.
-// No previene el envío. Para validación manual: window.tiendaValidateForm()
+// Validación tienda
 
 (() => {
   'use strict';
@@ -9,7 +7,7 @@
   const form = byId('form-crear-tienda') || document.querySelector('form');
   if (!form) return;
 
-  // Referencias a campos (si alguno no existe, se ignora sin romper)
+  // Campos
   const F = {
     nombre:        byId('nombre'),
     apellido:      byId('apellido'),
@@ -38,7 +36,7 @@
   // Utilidades UI
   const ensureFeedback = (input) => {
     if (!input) return null;
-    // Busca un .invalid-feedback dentro del mismo grupo; si no, lo crea
+    // Asegurar feedback
     let fb = input.nextElementSibling;
     if (!(fb && fb.classList && fb.classList.contains('invalid-feedback'))) {
       fb = document.createElement('div');
@@ -57,7 +55,7 @@
     return !!ok;
   };
 
-  // CUIL (opcional): chequeo de dígito verificador (módulo 11, pesos 5-4-3-2-7-6-5-4-3-2)
+  // Chequeo CUIL
   const cuilCheckDigitOK = (val) => {
     const num = String(val || '').replace(/\D/g, '');
     if (!/^\d{11}$/.test(num)) return false;
@@ -85,7 +83,7 @@
 
     telefono: () => {
       const val = F.telefono?.value?.trim() || '';
-      // Teléfono es opcional: si está vacío, limpio estados
+      // Teléfono opcional
       if (val === '') return setState(F.telefono, true, '');
       return setState(F.telefono, RX.telefono.test(val), 'Solo dígitos (7–20).');
     },
@@ -99,7 +97,6 @@
     cuil: () => {
       const val = F.cuil?.value?.trim() || '';
       if (!RX.cuil.test(val)) return setState(F.cuil, false, 'CUIL inválido (11 dígitos).');
-      // Chequeo verificador opcional; si querés solo longitud, comentá la línea siguiente
       if (!cuilCheckDigitOK(val)) return setState(F.cuil, false, 'CUIL inválido (dígito verificador).');
       return setState(F.cuil, true, '');
     },
@@ -135,7 +132,7 @@
   };
   Object.entries(F).forEach(([name, el]) => attach(name, el));
 
-  // Exponer una función global (opcional) por si querés usarla desde Tienda_Fetch.js antes de enviar
-  window.tiendaValidateForm = validateAll;
+  // Export validate
+  window.tiendaValidateForm = validateAll; 
 
 })();

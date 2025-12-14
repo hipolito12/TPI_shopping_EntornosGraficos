@@ -76,7 +76,6 @@ $totalPromos          = count($promociones);
 
     .copy-chip { cursor:pointer; user-select:all; }
 
-    /* Estilos para el historial y novedades */
     .historial-item, .novedad-item {
         border-left: 4px solid var(--primary);
         padding-left: 1rem;

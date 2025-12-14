@@ -2,8 +2,6 @@
 session_start();
 require_once '../Model/AprobarPromocion.php';
 
-// Funciones para  promociones
-
 $mensaje = '';
 $tipoMensaje = '';
 
@@ -22,7 +20,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         switch ($action) {
             case 'aprobar':
                 if (actualizarEstadoPromocion($idPromocion, '1')) {
-                    //email de aprobación
                     $emailEnviado = enviarEmailAprobacionPromocion($promocion, $promocion['comerciante_email']);
                     
                     $mensaje = 'Promoción aprobada exitosamente. ';
@@ -36,7 +33,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 
             case 'rechazar':
                 if (actualizarEstadoPromocion($idPromocion, '2')) {
-                    // email de rechazo
                     $emailEnviado = enviarEmailRechazoPromocion($promocion, $promocion['comerciante_email']);
                     
                     $mensaje = 'Promoción rechazada exitosamente. Se envió notificación al comerciante.';
@@ -49,12 +45,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
     
-    // Redirigir para evitar reenvío del formulario
     header('Location: AprobarPromociones.php?mensaje=' . urlencode($mensaje) . '&tipo=' . $tipoMensaje);
     exit;
 }
 
-// Manejar mensajes de redirección
 if (isset($_GET['mensaje'])) {
     $mensaje = $_GET['mensaje'];
     $tipoMensaje = $_GET['tipo'] ?? 'info';
@@ -214,11 +208,7 @@ $estadisticas = getEstadisticasPromociones();
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                         <li><a class="dropdown-item" href="./DashboardAdministrador.php">Menu</a></li>
-                        <li><a class="dropdown-item" href="./GestionLocales.php">Gestión de Locales</a></li>
-                        <li><a class="dropdown-item" href="./AprobarSolicitudes.php">Aprobar Solicitudes</a></li>
-                        <li><a class="dropdown-item active" href="./AprobarPromociones.php">Aprobar Promociones</a></li>
-                        <li><a class="dropdown-item" href="./GestionNovedades.php">Gestión de Novedades</a></li>
-                        <li><a class="dropdown-item" href="./Reportes.php">Reportes</a></li>
+                        
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item text-danger" href="../Model/logout.php">Cerrar sesión</a></li>
                     </ul>

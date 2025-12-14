@@ -31,7 +31,6 @@
             box-shadow: 0 6px 24px rgba(13, 110, 253, 0.18);
         }
         
-        /* Estilos para el campo de contraseña con el ojito */
         .password-input-group {
             position: relative;
         }

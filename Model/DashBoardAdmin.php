@@ -7,31 +7,26 @@ function getEstadisticasGenerales() {
     
     $stats = [];
     
-    // Total de locales
     $query = "SELECT COUNT(*) as total FROM local";
     $stmt = $pdo->prepare($query);
     $stmt->execute();
     $stats['total_locales'] = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
     
-    // Solicitudes pendientes de validación
     $query = "SELECT COUNT(*) as total FROM solicitud";
     $stmt = $pdo->prepare($query);
     $stmt->execute();
     $stats['solicitudes_pendientes'] = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
     
-    // Promociones pendientes de aprobación
     $query = "SELECT COUNT(*) as total FROM promocion WHERE estado = 0";
     $stmt = $pdo->prepare($query);
     $stmt->execute();
     $stats['promociones_pendientes'] = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
     
-    // Total de novedades activas
     $query = "SELECT COUNT(*) as total FROM novedad WHERE hasta >= CURDATE()";
     $stmt = $pdo->prepare($query);
     $stmt->execute();
     $stats['novedades_activas'] = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
     
-    // Usos de promociones (últimos 30 días)
     $query = "SELECT COUNT(*) as total FROM usopromocion WHERE fechaUso >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)";
     $stmt = $pdo->prepare($query);
     $stmt->execute();
@@ -40,7 +35,6 @@ function getEstadisticasGenerales() {
     return $stats;
 }
 
-// Obtener locales para gestión
 function getLocales() {
     $pdo = getConnection();
     $query = "
@@ -55,7 +49,6 @@ function getLocales() {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-// Obtener solicitudes pendientes de dueños
 function getSolicitudesPendientes() {
     $pdo = getConnection();
     $query = "SELECT * FROM solicitud ORDER BY IDsolicitud DESC";
@@ -64,7 +57,6 @@ function getSolicitudesPendientes() {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-// Obtener promociones pendientes de aprobación
 function getPromocionesPendientes() {
     $pdo = getConnection();
     $query = "
@@ -79,7 +71,6 @@ function getPromocionesPendientes() {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-// Obtener novedades activas
 function getNovedadesActivas() {
     $pdo = getConnection();
     $query = "SELECT * FROM novedad WHERE hasta >= CURDATE() ORDER BY desde DESC";
@@ -141,7 +132,6 @@ function getReporteUsos($filtros = []) {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-// Obtener todos los locales para filtros
 function getAllLocales() {
     $pdo = getConnection();
     $query = "SELECT IDlocal, nombre FROM local ORDER BY nombre";

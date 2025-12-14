@@ -3,7 +3,7 @@
     const el = document.getElementById('btnLogin');
     if (!el) return;
 
-    el.setAttribute('href', '/TPIShopping/View/DashBoardCliente.php');
+    el.setAttribute('href', './View/DashBoardCliente.php');
 
     const icon = el.querySelector('i');
     if (icon) {
@@ -17,7 +17,7 @@
     if (el.tagName.toLowerCase() !== 'a') {
       el.addEventListener('click', (e) => {
         e.preventDefault();
-        location.assign('/TPIShopping/');
+        location.assign('/');
       });
     }
   }

@@ -1,5 +1,4 @@
 <?php
-// BASE dinámico portable (raíz o subcarpeta)
 $docRoot = isset($_SERVER['DOCUMENT_ROOT']) ? realpath($_SERVER['DOCUMENT_ROOT']) : '';
 $appRoot = realpath(dirname(__DIR__)); 
 
@@ -18,7 +17,7 @@ if (!empty($_SERVER['BASE_URI'])){ $BASE = rtrim($_SERVER['BASE_URI'],'/').'/'; 
 <style>
     <?php include dirname(__DIR__) . '/layouts/css/footer.css'; ?>
 
-    /* Mejoras de navegabilidad y estética */
+    /* Estilos footer */
     .footer-links a {
         transition: all 0.3s ease;
         display: block;
@@ -128,7 +127,6 @@ if (!empty($_SERVER['BASE_URI'])){ $BASE = rtrim($_SERVER['BASE_URI'],'/').'/'; 
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Mejorar navegación táctil
     const footerLinks = document.querySelectorAll('.footer-links a');
     
     footerLinks.forEach(link => {
@@ -142,14 +140,11 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Fix para el botón "Atrás" del navegador (Recarga la página para actualizar sesión)
 window.addEventListener("pageshow", function(event) {
     var historyTraversal = event.persisted || 
                            (typeof window.performance != "undefined" && 
                             window.performance.navigation.type === 2);
     
-    if (historyTraversal) {
-        window.location.reload();
-    }
+    if (historyTraversal) window.location.reload();
 });
 </script>
