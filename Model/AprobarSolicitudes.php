@@ -206,15 +206,15 @@ function enviarEmail($destinatario, $asunto, $mensaje) {
         $mail->isSMTP();
         $mail->Host = getenv('SMTP_HOST') ?: 'smtp.gmail.com';
         $mail->SMTPAuth = filter_var(getenv('SMTP_AUTH') ?: 'true', FILTER_VALIDATE_BOOLEAN);
-        $mail->Username = getenv('SMTP_USER') ?: 'labarbahipolito3@gmail.com';
-        $mail->Password = getenv('SMTP_PASS') ?: 'dzgr hgxl dnci guei';
+        $mail->Username = getenv('SMTP_USER') ?: '';
+        $mail->Password = getenv('SMTP_PASS') ?: '';
         $secureEnv = strtolower(getenv('SMTP_SECURE') ?: 'tls');
         $mail->SMTPSecure = ($secureEnv === 'ssl') ? PHPMailer::ENCRYPTION_SMTPS : PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port = intval(getenv('SMTP_PORT') ?: 587);
         $mail->CharSet = getenv('SMTP_CHARSET') ?: 'UTF-8';
 
         // Remitente y Destinatario
-        $from = getenv('SMTP_FROM') ?: 'labarbahipolito3@gmail.com';
+        $from = getenv('SMTP_FROM') ?: '';
         $fromName = getenv('SMTP_FROM_NAME') ?: 'Shopping UTN';
         $mail->setFrom($from, $fromName);
         $mail->addAddress($destinatario);
